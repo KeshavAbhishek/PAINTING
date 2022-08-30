@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://kit.fontawesome.com/477be79e6e.js" crossorigin="anonymous"></script>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+			box-sizing: border-box;
+		}
+		body{width: 100%;height: 100vh;display: flex;align-items: center;justify-content: center;}
+		#image{
+			width: 75%;
+			aspect-ratio: 0.62530414;
+			/* border: 1px solid red; */
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-position: center !important;
+			background-size: cover !important;
+			transition: background 0.5s ease-in-out;
+		}
+		.btn{
+			position: absolute;
+			top: 50%;
+			font-size: 20pt;
+			width: 50px;
+			height: 50px;
+			color: white;
+			background: #000;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+		}
+		#left{
+			left: 0;
+		}
+		#right{
+			right: 0;
+
+		}
+	</style>
+</head>
+<body>
+	<i class="fa-solid fa-angle-left btn" id="left" onclick="swipeLeft()"></i>
+	<i class="fa-solid fa-angle-right btn" id="right" onclick="swipeRight()"></i>
+	<div id='image'></div>
+	<script defer>
+		var dict = {
+			"ORIGINAL" : "https://lh3.googleusercontent.com/haYWsfbpSGgh1yMVOzhFrbteBkP5n3RCjExi0QeLH9yfQDxw55zhTYLfgwWiBqN-CEa5Hy6KBOpcnih7PEl8crMvTByYblm9lf_A2bh3bU2_1R00n4SH8JRkxugXGNQVdvvWAfhf1YnIAbmMFhSNmRcnf1w6QQKsyKxxtq0_w6MDeRVC1qKzLIcsJ6m0cxDHxtCZDVZmw-rh7MA7QYgDgJOEQmpYIoVnFQUD4mdGcCXOcmbHbJqhhI6AkCMSmmjtCclQWEpTNQEyjkU4EqGMD0mWgyCAvMPLPWqhmp8kzrpnhyq9kuH1lWIgM3Y_4mrGAP3iOSxGwXt7XlG-9634XgCv4Ou2IWLOHjzZAm6XFo8PfqapKbuC8aUcQG8T_shFy2PcjJvhAjUaOo61TgkJMtli2UGV379tu5r4PZh2OkRU4hTTQQVrUraV5t5zFdhXrNke3jgtr57CQClQXr6Pkt57OqNRFDtfh7kejADFyfKfGLPGzu9-lGUAXZcC0JFakUXLZv9F4F_UBS08Kjoc5w7vEwBcaSl-LQGeWTSxDNzIi9iphK5WVPPY1iZ5zUUCgC2_6-T7UuTkviVWyxl01vJcMed6oZUnHuGvQVCiUW8_HugZTBBOdA1enZNZ9wMs4vuJUwoTZjI4fUSv4Ogkc3zLYI_6qTRaGfiqT4WVLUIc5rwujV9FR_UIDRu5iV0KglIGPTqMpymy3Jq6B3gy4tsPYNCl223pg8km4qDGYa4Ejh4US7ytJhYhHo3_bRo=w463-h740-no?authuser=0",
+			"MAGICCOLOR" : "https://lh3.googleusercontent.com/kbTkh3Aw6We3ycskkJMfvsY8lRuL3S_X4CdGmi1lmtU1fRDE1miH8yYyhKt_s2UmoDSyrnqCoHtNbtHSYPESo4Nayxao4OpteqxMq9AaFJnSLBYKP5IssUw0WEmMJklBsQKynpRZevCPN5K_2uAjCEi2nek5H2xMk3ZAqarql4smIKSvnP2RylRniXZAZWKzsHiVbCh0-X-Sx9-zwTVQh-QJkJL7E1uJJcTQejeZI1V1Q75K7G0e1sHhb6vaBLVr3w2dDGFBHkNmtC1t-62J4jmYNQ9_pSYR_Pq2Gua_CNwP73oQepzpAs8rKf8MQFblA3uG4J5S95DA4zEYAkXyQ1jWUr_NdlI-tgIxYOuQx-Eby6jTEKnFjkhrJ193kgpfRcWUiCJPqPqHWtH_fyY4yFO296yWYjW6i-_4T8LKfzmU2Y8wLMZRhP_3I8Qo2L5Mde5AUuh1PGAsM9wPRvtKy0Eue2JVhMJrZo0Zqiz1p45Syyq8s0Vjyt4fm33hMiy7gS8UXrVcnvwozUopihlaoPeQh5OpAjUsCYmY_ibyOQxb3ZWec7yFJ_eu-h8bKcIWLOPJvaKjbfFGr9tsP4dDe9aOSc06mO1GAjHYcZ3c6rGsatvE39iqP4a0isZJicXr0J6iEjGPoIfzDBeWiool0ae3dx6oSfkGyGF5k55mmkXrpARRvAMXr6DWHVgOsKmSKpzpGBqJnD-8eIuFnAAvftSlMGEYsl3X51nxdweKJW74SR_TbjGwAY7VyMvaD_4=w459-h734-no?authuser=0",
+			"GRAYSCALE" : "https://lh3.googleusercontent.com/7VUsT6XwougqP8dMFAqS8XR8BOAkUQWLxCZ8bN7P5S4Uql_55ccuuCI66vGYyfqKJy7brOKGsAsfu0rLRBrBjO_yJToAFcVZIb0bqgqJd8IfvvSk9Z7ssXYFOsurVFrLO8edYYn2JU1dRkBS-2kp8_TcgzsXLjcJzUG3uV24z0K4amjyXMyuPl8yPK4rUuUCrMfLVW9_NPx-Hgt7BcdIfMHY-lUx_ovgO0nE8aFS_hSdSC-UI9bd6EhlfBgov_Wg3YT1VQIwSyTXiwADpVrfZDXyfig-kx_ui2g3yoAsUG8eQEALnnIXp927ixt72CChEwkKA6va9N_p_DFX4y__oBEX8tpACjlk1NI-Sonx6PqO-w6qL10zJmYNoo1PYxE3rFQCEOjgx8k0zsRtVt5j19D985vy0QleR30pKvDpNAyHDmIyf5hTUBokihtOmkYfRIjI3Q1SlIU2XuVl77ioRBnLNl8YcJuBRFir7N6Va9fBWxNHpsHuuiR0todSfqrS3IQOTVLW1zyiUOHVNsiFECldfDMnlbdIO8tGJUv-HHXHg8o4SfTm4B_02_3ZwlBrBpc6O475mzbN2_Ly6FKxVMEas8Mss3TVo1SmR47OKdWY8Tn-ybDHL6KgdHxL1LE12E5T68P1vRhyILmJTY0k4b50qU2Cvs_tQE8rrlnGj9nXvXo2gi1nLyfQKMsaW-VFDUHKW1bpWzrF_2JoYdHwwUZBrYraecv00giibQ6g9vu6voOsG9apz6nt-8nVQZI=w459-h734-no?authuser=0",
+			"B&W" : "https://lh3.googleusercontent.com/wT0EpzLynrMkurnz7ffc_KfLmMgVT_SXMVlrpNqu4-T4mA-2z65cFLsqOD95HPjiQ7KgcJuT636U2OlWyBevLaBUgRvr78ORXI8uYZs_CklnXE-_voHlC3UvvqVqqeR9f5yPKHgnQDT_-_bcDNegngw-JaTTnt_vOZHwUdeRQgkEeiLLhAZmPc9XUijQQTmzxaEgkgDk1jodpfRjCGsgAuZwKuo_iZV2mLWFgRwnqca-waCXAfeg_wDCR8YYQpl_LmjwxY2oG_Hph5_OiVUG_UtINfxGy1hCdRm3jYbP0oRxEZw3-dfeUGhWIr1SqZ1iEqfF4cJvccmFB5nRBBBpgsa_Iomzk4l4f8I6_OBK65syepnVo-31QypPgRr9oJ83G4mJ109qVJyLPwWj9TXFZAtoYboOO23f-k_IB1HY3SQBHiJZP58Vr1qVg-ge_CNiHnY4W-sVzZ4usyT9QRu-JFz3Au9dMyeYyB-TsCozaUpegOor8aaiQtzblziUZGdv4_YTo6Xvsh8fwDMiiV6NFm0zpFHZS_t4IATX0OOh2JuWiU3_4pWP1cEp7Rz2yihWt4Dj_k_--mGZjimVd2ZwOKqi6gEu2Zv_szdPgUKkokv9XT5S7FdDnKJoapzbXTnG5abOTtFkzV2O_OpNhSI6KjrwnxZVszfgYz4ja2DsbQPq02eLysJe_OhmVFsi06n73P_zFTFBED4ijo5gckE5qqugsgEhMjExvii85JV7ApJOFOOBXrnBw0GrYfOZ424=w459-h734-no?authuser=0",
+			"ECO" : "https://lh3.googleusercontent.com/_nuDHuQb8UcRTNyIJmRTmiJAw11RokBWWir3HTs1E90tUy3y_8u8qYVjHCpEjl1qQ9thHPI5G4KkLYU5US3Kg4sVrvvAc5ZDMD7Z8w0l0ihsRORp0ki_E4Lik8O-Kr3H_KVJonhV-hwLaOZn4FOqzDAYPkl61mSt9TstlJLYBD45E0daBGqZr1QYoRGE0_dH9SL1C0xaaY5IWZ7YKPLzhhFW8FoCiJLPfoCzFOEHayK49N5DfgJ3PLDQZZ7AlNQ2zEs8O93u_ZHLgk9kgH5IsrMywKgdGfv0Jirl50NcK-Yc9bWx_fAe5Fr18WjxXWdc0vq1_NfBCMDcVy8ChvI7Z7UrDpTBdksAjdIjjr2oo_mRY9on3QfB0op1C17-LNcfdo6SJOHsmPd0PP3foDnHwEZm2tF4SwFsxu6gfhkkAPxPNv7GNvHmTk2wfeaRxthBNhV9EozIOjfgWuIVtSSuB7qryp5EjC-lAznYlgd-FRCkLexhojMWQk_77v0gSC9H_EUs3ASPgAyGqMXx2HKpl05MoiW8NtybRBIFl7SBbIl-6Ty8TFNPRnCyXUxWhHvE4qQJE5oOSzFoAR8-vfEndBBmZUjvWXbRoAoJMhJ4EiXezs0opVYmAIpyUMdsVevtMLWi42dWKkvCdguOXj4ZG2f2w8noQw9abOm5XpOLmSKdhl1N34NdKagEgogigXyPFmlgeS0XF87LOvfaVZ9-tik2puXA-Ww0ggwYNbZVnzUHFMw0gfbXNu3l7Y7lYRc=w459-h734-no?authuser=0"
+		}
+
+		var list = ['ORIGINAL', 'MAGICCOLOR', 'GRAYSCALE', 'B&W', 'ECO']
+		var i = 0;
+		document.getElementById("image").style.background=`url(${dict[list[i]]})`;
+		// setInterval(() => {
+		// 	document.getElementById("image").style.background=`url(${dict[list[i]]})`;
+		// 	i+=1;
+		// 	if(i==5){
+		// 		i=0;
+		// 	}
+		// }, 5000);
+		function swipeLeft(){
+			if(i>0 && i<=4){
+				i-=1;
+				document.getElementById("image").style.background=`url(${dict[list[i]]})`;
+			}
+		}
+		function swipeRight(){
+			if(i<4 && i>=0){
+				i+=1;
+				document.getElementById("image").style.background=`url(${dict[list[i]]})`;
+			}
+			if(i>4){
+				i=0;
+			}
+		}
+	</script>
+</body>
+</html>
